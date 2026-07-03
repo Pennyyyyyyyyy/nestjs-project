@@ -54,8 +54,6 @@ DATABASE_URL="file:./dev.db"
 JWT_SECRET="<請用 openssl rand -hex 32 產生一組亂數>"
 ```
 
-`JWT_SECRET` 千萬不要 commit 到版控，`.gitignore` 已排除 `.env`。
-
 ### 建立資料庫
 
 ```bash
@@ -199,16 +197,6 @@ Authorization: Bearer <accessToken>
 - JWT secret 從環境變數讀取，開機時透過 `ConfigService.getOrThrow` 檢查是否存在，遺漏時直接失敗
 - Register 檢查 email 是否重複，發生衝突回 `409`
 
-## 已知限制與後續可延伸
-
-這是練習專案，範圍刻意收斂。以下是尚未實作但意識到的事：
-
-- **未實作 refresh token**：目前 access token 直接有效 7 天。合理的做法是短期 access token（15 分鐘）+ refresh token 換發
-- **未實作登出後端邏輯**：JWT 為無狀態，若需即時作廢需引入 token 黑名單或改用 session
-- **密碼強度規則簡單**：僅檢查長度 ≥ 8，未強制大小寫、數字、特殊符號組合
-- **未做 rate limiting**：`/auth/login` 未防暴力破解，之後可導入 `@nestjs/throttler`
-- **無 e2e 測試**：目前手動用 curl / Postman 驗證，未來可用 `supertest` 補上
-- **開發用 SQLite**：正式環境應改用 PostgreSQL 或其他 RDBMS，schema 已可直接切換
 
 ## 測試（手動）
 
